@@ -19,8 +19,48 @@ Insérer dans le fichier **.gitignore**
 Créer le fichier **.env** à la racine du projet et insérer le code suivant
 
 ```
+APP_NAME=<MY_APP_NAME>
 PORT=10000
 ```
 
 
 ## Code minimal
+
+Créer le fichier **src/index.ts** et copier :
+
+```
+import dotenv from "dotenv";
+dotenv.config();
+
+import server from "./server";
+
+server();
+```
+
+Créer le fichier **src/server.ts** et copier :
+
+```
+import express from "express";
+import cors from "cors";
+import expressFormidable from "express-formidable";
+
+// Import routes
+import { defaultRoutes } from "./routes";
+
+const app = express();
+
+// Middlewares
+app.use(cors());
+app.use(expressFormidable());
+
+// Routes use
+app.use(defaultRoutes);
+
+// Application start
+app.listen(process.env.PORT, () => {
+  console.log(
+    `${process.env.APP_NAME} has started on port ${process.env.PORT}`
+  );
+});
+
+export default () => app;
