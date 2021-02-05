@@ -24,7 +24,7 @@ PORT=10000
 ```
 
 
-## Code minimal
+## Exemple
 
 Créer le fichier **src/index.ts** et copier :
 
