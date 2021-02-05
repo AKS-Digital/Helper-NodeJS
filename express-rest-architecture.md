@@ -78,7 +78,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err.isJoi) {
       throw new createError.UnprocessableEntity(err.details[0].message);
     } else {
-      throw new createError.BadRequest(err.message);
+      throw createError(err.status, err.message);
     }
   } catch (err) {
     res.status(err.status ?? 500).send(err);
@@ -99,11 +99,16 @@ Créer le fichier **src/routes/default.ts** et copier :
 
 ```ts
 import { Router } from "express";
+import createError from "http-errors";
 
 const router = Router();
 
-router.all("*", (req, res) => {
-  return res.status(404).json({ status: 404, message: "Not Found" });
+router.all("*", (req, res, next) => {
+  try {
+    throw new createError.NotFound("Route doesn't exists");
+  } catch (err) {
+    next(err);
+  }
 });
 
 export default router;
