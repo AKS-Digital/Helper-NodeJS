@@ -36,7 +36,7 @@ Insérer dans le fichier **package.json** le code suivant pour executer les test
 
 ## Example
 
-Créer un fichier dans **\_test\_server.test.ts** le code :
+Créer un fichier dans **\_test\_/server.test.ts** le code :
 
 ```ts
 import dotenv from "dotenv";
