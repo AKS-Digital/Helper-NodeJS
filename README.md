@@ -9,7 +9,7 @@ Ce fichier regroupe tous les éléments afin de mettre en place un serveur **Nod
 - Intégration de Docker
 - Publication de l'application sur serveur Heroku
 - Serveur avancé
-  - Authentification (JWT)
+  - [Authentification (JWT)](auth.md)
   - Collection (Utilisateurs)
   - Collection (Carte de crédit)
   - Envoi d'email
