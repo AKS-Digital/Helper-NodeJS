@@ -28,7 +28,7 @@ PORT=10000
 
 Créer le fichier **src/index.ts** et copier :
 
-```
+```ts
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -39,7 +39,7 @@ server();
 
 Créer le fichier **src/server.ts** et copier :
 
-```
+```ts
 import express from "express";
 import cors from "cors";
 import expressFormidable from "express-formidable";
@@ -68,7 +68,7 @@ export default () => app;
 
 Créer le fichier **src/routes/index.ts** et copier :
 
-```
+```ts
 import defaultRoutes from "./default";
 
 export { defaultRoutes };
@@ -77,7 +77,7 @@ export { defaultRoutes };
 
 Créer le fichier **src/routes/default.ts** et copier :
 
-```
+```ts
 import { Router } from "express";
 
 const router = Router();
