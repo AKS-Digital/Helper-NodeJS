@@ -36,20 +36,33 @@ Insérer dans le fichier **package.json** le code suivant pour executer les test
 
 ## Example
 
-Créer un fichier dans **\_test\_/server.test.ts** le code :
+Créer un fichier dans **\_test\_/setup.test.ts** le code :
 
 ```ts
 import dotenv from "dotenv";
 dotenv.config();
+import { mongoDB } from "../db";
+
+beforeAll(async () => {
+  await mongoDB.connect();
+});
+
+afterAll(async () => {
+  await mongoDB.close();
+});
+
+describe("initialization", () => {
+  test("Database initialization", () => console.log("init mongoDB"));
+});
+```
+
+Créer un fichier dans **\_test\_/server.test.ts** le code :
+
+```ts
 import supertest from "supertest";
-import mongoDB from "../db";
 import { app } from "../app";
 
 const request = supertest(app);
-
-beforeAll(() => {
-  mongoDB.connect();
-});
 
 describe("Server", () => {
   it("should test server", async (done) => {
@@ -58,10 +71,6 @@ describe("Server", () => {
     expect(response.body).toStrictEqual({ status: 404, message: "Not Found" });
     done();
   });
-});
-
-afterAll(() => {
-  mongoDB.close();
 });
 ```
 
