@@ -40,23 +40,8 @@ server();
 Créer le fichier **src/server.ts** et copier :
 
 ```ts
-import express from "express";
-import cors from "cors";
-import expressFormidable from "express-formidable";
+import { app } from "./app";
 
-// Import routes
-import { defaultRoutes } from "./routes";
-
-const app = express();
-
-// Middlewares
-app.use(cors());
-app.use(expressFormidable());
-
-// Routes use
-app.use(defaultRoutes);
-
-// Application start
 app.listen(process.env.PORT, () => {
   console.log(
     `${process.env.APP_NAME} has started on port ${process.env.PORT}`
@@ -64,6 +49,26 @@ app.listen(process.env.PORT, () => {
 });
 
 export default () => app;
+```
+
+Créer le fichier **src/app.ts** et copier :
+
+```ts
+import express from "express";
+import cors from "cors";
+import expressFormidable from "express-formidable";
+
+// Import routes
+import { defaultRoutes } from "./routes";
+
+export const app = express();
+
+// Middlewares
+app.use(cors());
+app.use(expressFormidable());
+
+// Routes use
+app.use(defaultRoutes);
 ```
 
 Créer le fichier **src/routes/index.ts** et copier :
