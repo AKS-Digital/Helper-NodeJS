@@ -64,3 +64,28 @@ app.listen(process.env.PORT, () => {
 });
 
 export default () => app;
+```
+
+Créer le fichier **src/routes/index.ts** et copier :
+
+```
+import defaultRoutes from "./default";
+
+export { defaultRoutes };
+```
+
+
+Créer le fichier **src/routes/default.ts** et copier :
+
+```
+import { Router } from "express";
+
+const router = Router();
+
+router.all("*", (req, res) => {
+  return res.status(404).json({ status: 404, message: "Not Found" });
+});
+
+export default router;
+
+```
