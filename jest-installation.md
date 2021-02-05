@@ -28,7 +28,7 @@ Insérer dans le fichier **package.json** le code suivant pour executer les test
       "ts"
     ],
     "testMatch": [
-      "**/_test_/**/*.test.(ts|js)"
+      "**/_test_/**/*.test.(ts)"
     ],
     "testEnvironment": "node"
   },
