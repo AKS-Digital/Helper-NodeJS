@@ -6,7 +6,7 @@
 ## Installation
 
 ```zsh
-npm install jest ts-jest supertest
+npm install jest ts-jest supertest @types/supertest
 ```
 
 ## package.json
