@@ -5,7 +5,7 @@ Express est un cadre d'application Web Node.js minimal et flexible qui fournit u
 ## Installation des dépendances
 
 ```
-npm install dotenv express @types/express cors express-formidable @types/express-formidable
+npm install dotenv express @types/express cors express-formidable @types/express-formidable http-errors @types/http-errors
 ```
 
 ## dotenv
@@ -54,12 +54,13 @@ export default () => app;
 Créer le fichier **src/app.ts** et copier :
 
 ```ts
-import express from "express";
-import cors from "cors";
+import express, { NextFunction, Request, Response } from "express";
 import expressFormidable from "express-formidable";
+import createError from "http-errors";
+import cors from "cors";
 
 // Import routes
-import { defaultRoutes } from "./routes";
+import { defaultRoutes, userRoutes } from "./routes";
 
 export const app = express();
 
@@ -67,8 +68,22 @@ export const app = express();
 app.use(cors());
 app.use(expressFormidable());
 
-// Routes use
+// Router
+app.use(userRoutes);
 app.use(defaultRoutes);
+
+// Error handler middleware
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (err.isJoi) {
+      throw new createError.UnprocessableEntity(err.details[0].message);
+    } else {
+      throw new createError.BadRequest(err.message);
+    }
+  } catch (err) {
+    res.status(err.status ?? 500).send(err);
+  }
+});
 ```
 
 Créer le fichier **src/routes/index.ts** et copier :
@@ -92,5 +107,4 @@ router.all("*", (req, res) => {
 });
 
 export default router;
-
 ```
