@@ -65,10 +65,10 @@ import { app } from "../app";
 const request = supertest(app);
 
 describe("Server", () => {
-  it("should test server", async (done) => {
+  it("should test unknown routes", async (done) => {
     const response = await request.get("/unknown-route");
     expect(response.status).toBe(404);
-    expect(response.body).toStrictEqual({ status: 404, message: "Not Found" });
+    expect(response.body).toStrictEqual({ message: "Route doesn't exists" });
     done();
   });
 });
