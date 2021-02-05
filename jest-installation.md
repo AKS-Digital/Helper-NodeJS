@@ -36,26 +36,6 @@ Insérer dans le fichier **package.json** le code suivant pour executer les test
 
 ## Example
 
-Créer un fichier dans **\_test\_/setup.test.ts** le code :
-
-```ts
-import dotenv from "dotenv";
-dotenv.config();
-import { mongoDB } from "../db";
-
-beforeAll(async () => {
-  await mongoDB.connect();
-});
-
-afterAll(async () => {
-  await mongoDB.close();
-});
-
-describe("initialization", () => {
-  test("Database initialization", () => console.log("init mongoDB"));
-});
-```
-
 Créer un fichier dans **\_test\_/server.test.ts** le code :
 
 ```ts
