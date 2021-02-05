@@ -75,11 +75,6 @@ mongoose.connection.on("disconnected", () =>
   console.log("Mongoose connection is closed")
 );
 
-process.on("SIGINT", async () => {
-  await close();
-  process.exit(0);
-});
-
 export default { connect, close };
 ```
 
@@ -100,4 +95,9 @@ import mongoDB from "./db";
 //... code
 mongoDB.connect();
 //... code serveur
+
+process.on("SIGINT", async () => {
+  await mongoDB.close();
+  process.exit(0);
+});
 ```
