@@ -26,6 +26,8 @@ const UserSchema: Schema = new Schema({
 export const User = mongoose.model<IUser>("User", UserSchema);
 ```
 
+## Création d'un validateur
+
 Créer un fichier **src/validator/user.validator.ts** et copier :
 
 ```ts
@@ -51,6 +53,7 @@ export const authSchema = Joi.object({
 });
 ```
 
+## Création des routes utilisateur
 
 Créer un fichier **src/routes/user.routes.ts** et copier :
 
