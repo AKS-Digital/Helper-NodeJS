@@ -31,11 +31,73 @@ npm install mongoose
 
 ## Example
 
-Connexion à la base de données.
+Ajouter les champs suivant dans le fichier **.env**
 
-```js
-mongoose.connect("mongodb://localhost/exemple", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+```
+MONGODB_URI=<MY_DATABASE_URI>
+MONGODB_URI_DEV=mongodb://localhost:27017
+```
+Créer le fichier **src/db/mongodb.ts** et copier :
+
+```ts
+import mongoose from "mongoose";
+
+const mode = process.env.NODE_ENV;
+const url =
+  mode === "prod" ? process.env.MONGODB_URI : process.env.MONGODB_URI_DEV;
+const dbName =
+  mode === "prod" ? process.env.APP_NAME : process.env.APP_NAME + "-dev";
+
+const connect = () => {
+  mongoose
+    .connect(url.toString(), {
+      dbName,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+      useCreateIndex: true,
+    })
+    .then(() => console.log(`Database connected at ${url}`))
+    .catch((err) => console.log(err.message));
+};
+
+const close = async () => {
+  await mongoose.connection.close();
+};
+
+mongoose.connection.on("connected", () =>
+  console.log("Mongoose connection is opened")
+);
+
+mongoose.connection.on("error", (err) => console.log(err.message));
+
+mongoose.connection.on("disconnected", () =>
+  console.log("Mongoose connection is closed")
+);
+
+process.on("SIGINT", async () => {
+  await close();
+  process.exit(0);
 });
+
+export default { connect, close };
+```
+
+Créer un fichier **src/db/index.ts** et copier :
+
+```ts
+import mongodb from "./mongodb";
+
+export default mongodb;
+```
+
+Insérer dans le fichier **src/index.ts** le code :
+
+```ts
+//... autres imports
+import mongoDB from "./db";
+
+//... code
+mongoDB.connect();
+//... code serveur
 ```
