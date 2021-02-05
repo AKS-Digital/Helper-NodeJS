@@ -32,7 +32,7 @@ git init
 Installer les dépendances pour le projet
 
 ```
-npm install typescript ts-node nodemon concurrently
+npm install typescript ts-node nodemon concurrently wait-on
 ```
 
 ## Package.json
@@ -41,7 +41,7 @@ Modifier le fichier **package.json** en insérant les lignes suivantes:
 
 ```
 "scripts": {
-    "dev": "concurrently -k -n \"Typescript,Node\" -p \"[{name}]\" -c \"blue,green\" \"tsc --watch\" \"NODE_ENV=dev nodemon dist/server.js\"",
+    "dev": "concurrently -k -n \"Typescript,Node\" -p \"[{name}]\" -c \"blue,green\" \"tsc --watch\" \"NODE_ENV=dev wait-on dist/index.js && nodemon dist/index.js\"",
     "start": "tsc && NODE_ENV=prod nodemon dist/server.js"
   },
 ```
