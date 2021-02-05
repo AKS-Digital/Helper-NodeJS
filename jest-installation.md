@@ -65,8 +65,14 @@ import { app } from "../app";
 const request = supertest(app);
 
 describe("Server", () => {
-  it("should test unknown routes", async (done) => {
+  it("should test unknown get routes", async (done) => {
     const response = await request.get("/unknown-route");
+    expect(response.status).toBe(404);
+    expect(response.body).toStrictEqual({ message: "Route doesn't exists" });
+    done();
+  });
+  it("should test unknown post route", async (done) => {
+    const response = await request.post("/unknown-route").send({ foo: "bar" });
     expect(response.status).toBe(404);
     expect(response.body).toStrictEqual({ message: "Route doesn't exists" });
     done();
