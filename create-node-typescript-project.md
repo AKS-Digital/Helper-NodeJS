@@ -53,7 +53,6 @@ Créer un fichier **.gitignore** et copier le contenu suivant
 ```
 node_modules
 dist
-.env
 ```
 
 Créer un fichier **tsconfig.json** et copier le contenu suivant
@@ -88,7 +87,7 @@ Pour lancer l'application en mode production
 npm start
 ```
 
-Pour lancer l'application en mode production
+Pour lancer l'application en mode développement
 ```
 npm run dev
 ```
