@@ -33,3 +33,40 @@ Insérer dans le fichier **package.json** le code suivant pour executer les test
     "testEnvironment": "node"
   },
 ```
+
+## Example
+
+Créer un fichier dans **\_test\_server.test.ts** le code :
+
+```ts
+import dotenv from "dotenv";
+dotenv.config();
+import supertest from "supertest";
+import mongoDB from "../db";
+import { app } from "../app";
+
+const request = supertest(app);
+
+beforeAll(() => {
+  mongoDB.connect();
+});
+
+describe("Server", () => {
+  it("should test server", async (done) => {
+    const response = await request.get("/unknown-route");
+    expect(response.status).toBe(404);
+    expect(response.body).toStrictEqual({ status: 404, message: "Not Found" });
+    done();
+  });
+});
+
+afterAll(() => {
+  mongoDB.close();
+});
+```
+
+Lancer les tests
+
+```zsh
+npm run test
+```
