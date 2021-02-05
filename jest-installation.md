@@ -14,6 +14,11 @@ npm install jest ts-jest supertest
 Insérer dans le fichier **package.json** le code suivant pour executer les tests sur tous les fichiers avec l'extension ***\*.test.js|ts*** se trouvant dans le répertoire **\_test\_**
 
 ```json
+"scripts": {
+    ...
+    "test": "jest",
+    ...
+  },
 "jest": {
     "transform": {
       "^.+\\.ts$": "ts-jest"
