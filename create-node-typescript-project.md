@@ -27,6 +27,14 @@ Pour initialiser un répertoire git
 git init
 ```
 
+## Installation des dépendances
+
+Installer les dépendances pour le projet
+
+```
+npm install typescript ts-node nodemon concurrently
+```
+
 ## Package.json
 
 Modifier le fichier **package.json** en insérant les lignes suivantes:
@@ -36,14 +44,6 @@ Modifier le fichier **package.json** en insérant les lignes suivantes:
     "dev": "concurrently -k -n \"Typescript,Node\" -p \"[{name}]\" -c \"blue,green\" \"tsc --watch\" \"NODE_ENV=dev nodemon dist/server.js\"",
     "start": "tsc && NODE_ENV=prod nodemon dist/server.js"
   },
-```
-
-## Installation des dépendances
-
-Installer les dépendances pour le projet
-
-```
-npm install typescript ts-node nodemon concurrently
 ```
 
 ## Création dossiers et fichiers
