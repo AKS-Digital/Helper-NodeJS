@@ -6,7 +6,7 @@
 npm install joi
 ```
 
-## Création d'un model de collection d'utilisateur pour MongoDB
+## Création du model mongoDB
 
 Créer un fichier **src/db/models/user.model.ts** et copier :
 
@@ -26,7 +26,7 @@ const UserSchema: Schema = new Schema({
 export const User = mongoose.model<IUser>("User", UserSchema);
 ```
 
-## Création d'un validateur
+## Création des validateurs
 
 Créer un fichier **src/validator/auth.validator.ts** et copier :
 
@@ -79,4 +79,12 @@ router.post("/register", async (req, res, next) => {
 });
 
 export default router;
+```
+
+## Création des tests
+
+Créer un fichier **src/\_test\_/auth.test.ts** et copier :
+
+```ts
+
 ```
