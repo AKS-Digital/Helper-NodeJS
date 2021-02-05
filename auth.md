@@ -86,5 +86,73 @@ export default router;
 Créer un fichier **src/\_test\_/auth.test.ts** et copier :
 
 ```ts
+import dotenv from "dotenv";
+dotenv.config();
+import supertest from "supertest";
+import { app } from "../app";
+import { mongoDB } from "../db";
 
+const request = supertest(app);
+
+beforeAll(async () => {
+  await mongoDB.connect();
+  await mongoDB.dropDatabase();
+});
+
+afterAll(async () => {
+  await mongoDB.close();
+});
+
+describe("Auth", () => {
+  const badEmail = "my@g.c";
+  const badPassword = "azerty";
+  const correctEmail = "test@test.com";
+  const correctPassword = "&Test123";
+
+  it("should test email validator", async (done) => {
+    const response = await request.post("/register").send({
+      email: badEmail,
+      password: correctPassword,
+    });
+    expect(response.status).toBe(422);
+    expect(response.body).toStrictEqual({
+      message: '"email" must be a valid email',
+    });
+    done();
+  });
+
+  it("should test password validator", async (done) => {
+    const response = await request.post("/register").send({
+      email: correctEmail,
+      password: badPassword,
+    });
+    expect(response.status).toBe(422);
+    expect(response.body.message).toContain(
+      "fails to match the required pattern"
+    );
+    done();
+  });
+
+  it("should create user", async (done) => {
+    const response = await request.post("/register").send({
+      email: correctEmail,
+      password: correctPassword,
+    });
+    expect(response.status).toBe(200);
+    expect(response.body._id).toBeDefined();
+    expect(response.body.email).toBeDefined();
+    expect(response.body.password).toBeDefined();
+    done();
+  });
+
+  it("should return conflict when user already exists", async (done) => {
+    const response = await request.post("/register").send({
+      email: correctEmail,
+      password: correctPassword,
+    });
+    expect(response.status).toBe(409);
+    expect(response.body.message).toBe(`${correctEmail} is already exists`);
+    done();
+  });
+});
 ```
