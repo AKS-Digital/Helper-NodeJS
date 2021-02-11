@@ -7,7 +7,7 @@
 
 Téléchargez la version LTS (Long-term support) sur le site [https://nodejs.org/](https://nodejs.org/).
 
-Pour connaitre la version de **git**
+Pour connaitre la version de **node**
 
 ```zsh
 node --version
@@ -42,7 +42,7 @@ Modifier le fichier **package.json** en insérant les lignes suivantes:
 ```
 "scripts": {
     "dev": "concurrently -k -n \"Typescript,Node\" -p \"[{name}]\" -c \"blue,green\" \"tsc --watch\" \"NODE_ENV=dev wait-on dist/index.js && nodemon dist/index.js\"",
-    "start": "tsc && NODE_ENV=prod nodemon dist/server.js"
+    "start": "tsc && NODE_ENV=prod nodemon dist/index.js"
   },
 ```
 
@@ -76,7 +76,7 @@ Créer un fichier **tsconfig.json** et copier le contenu suivant
 Créer un fichier **server.ts** dans un dossier **src**
 
 ```zsh
-src/server.ts
+src/index.ts
 ```
 
 ## Lancement de l'application
