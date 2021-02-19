@@ -3,7 +3,7 @@
 ## Installation des dépendances
 
 ```zsh
-npm install joi
+npm install joi bcrypt @types/bcrypt jsonwebtoken @types/jsonwebtoken
 ```
 
 ## Création du model mongoDB
@@ -53,6 +53,100 @@ export const authSchema = Joi.object({
 });
 ```
 
+## Création des helpers
+
+Créer un fichier **src/helpers/auth.token.ts** et copier :
+
+```ts
+import JWT, { decode } from "jsonwebtoken";
+import createError from "http-errors";
+import { Request, Response, NextFunction } from "express";
+
+// Decode userId at https://jwt.io/
+
+export const signAccessToken = (userId: string) => {
+  return new Promise((resolve, reject) => {
+    const payload = { name: process.env.APP_NAME };
+    const secret = process.env.ACCESS_TOKEN_SECRET;
+    const options = {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN,
+      issuer: "jwt.io",
+      audience: userId,
+    };
+    JWT.sign(payload, secret, options, (err, token) => {
+      if (err) return reject(new createError.InternalServerError());
+      resolve(token);
+    });
+  });
+};
+
+export const verifyAccessToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { authorization } = req.headers;
+  if (!authorization) return next(new createError.Unauthorized());
+  const token = authorization.split(" ")[1];
+  JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      const message =
+        err.name === "JsonWebTokenError" ? "Unauthorized" : err.message;
+      return next(new createError.Unauthorized(message));
+    }
+    req.body.decoded = decoded;
+    next();
+  });
+};
+
+export const signRefreshToken = (userId: string) => {
+  return new Promise((resolve, reject) => {
+    const payload = { name: process.env.APP_NAME };
+    const secret = process.env.REFRESH_TOKEN_SECRET;
+    const options = {
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN,
+      issuer: "jwt.io",
+      audience: userId,
+    };
+    JWT.sign(payload, secret, options, (err, token) => {
+      if (err) return reject(new createError.InternalServerError());
+      resolve(token);
+    });
+  });
+};
+
+export const verifyRefreshToken = (refreshToken: string) => {
+  return new Promise((resolve, reject) => {
+    JWT.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+      (err, decoded) => {
+        if (err) return reject(new createError.Unauthorized());
+        // @ts-ignore
+        resolve(decoded.aud);
+      }
+    );
+  });
+};
+```
+
+Créer un fichier **src/helpers/bcrypt.ts** et copier :
+
+```ts
+import bcrypt from "bcrypt";
+
+export const encodePassword = async (password: string) => {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return hashedPassword;
+};
+
+export const decodePassword = (password: string, dbPassword: string) => {
+  return bcrypt.compare(password, dbPassword);
+};
+```
+
+
 ## Création des routes utilisateur
 
 Créer un fichier **src/routes/auth.routes.ts** et copier :
@@ -60,28 +154,72 @@ Créer un fichier **src/routes/auth.routes.ts** et copier :
 ```ts
 import { Router } from "express";
 import createError from "http-errors";
-import { authSchema } from "../validator";
 import { User } from "../db";
+import { authSchema } from "../validator";
+import {
+  encodePassword,
+  decodePassword,
+  signAccessToken,
+  signRefreshToken,
+  verifyRefreshToken,
+} from "../helpers";
 
-const router = Router();
+export const authRoutes = Router();
 
-router.post("/register", async (req, res, next) => {
+authRoutes.post("/register", async (req, res, next) => {
   try {
     const { email, password } = await authSchema.validateAsync(req.fields);
     const user = await User.findOne({ email });
-    if (user) throw new createError.Conflict(`${email} is already exists`);
-    const newUser = new User({ email, password });
+    if (user)
+      throw new createError.Conflict(`${email} is already been registered`);
+    const hashedPassword = await encodePassword(password);
+    const newUser = new User({ email, password: hashedPassword });
     const savedUser = await newUser.save();
-    return res.send(savedUser);
+    const accessToken = await signAccessToken(savedUser.id);
+    const refreshToken = await signRefreshToken(savedUser.id);
+    return res.send({ accessToken, refreshToken });
   } catch (err) {
     next(err);
   }
 });
 
-export default router;
+authRoutes.post("/login", async (req, res, next) => {
+  try {
+    const { email, password } = await authSchema.validateAsync(req.fields);
+    const user = await User.findOne({ email });
+    if (!user) throw new createError.NotFound("User not registered");
+    const isValidPassword = await decodePassword(password, user.password);
+    if (!isValidPassword)
+      throw new createError.Unauthorized("email or password is not valid");
+    const accessToken = await signAccessToken(user.id);
+    const refreshToken = await signRefreshToken(user.id);
+    return res.send({ accessToken, refreshToken });
+  } catch (err) {
+    if (err.isJoi)
+      return next(new createError.BadRequest("Invalid email or password"));
+    next(err);
+  }
+});
+
+authRoutes.post("/refresh-token", async (req, res, next) => {
+  try {
+    const { refreshToken } = req.fields;
+    if (!refreshToken || typeof refreshToken !== "string")
+      throw new createError.BadRequest();
+    const userId = await verifyRefreshToken(refreshToken);
+    if (typeof userId !== "string") throw new createError.BadRequest();
+    const accessToken = await signAccessToken(userId);
+    const newRefreshToken = await signRefreshToken(userId);
+    return res.send({ accessToken, refreshToken: newRefreshToken });
+  } catch (err) {
+    next(err);
+  }
+});
 ```
 
 ## Création des tests
+
+TO DO
 
 Créer un fichier **src/\_test\_/auth.test.ts** et copier :
 
