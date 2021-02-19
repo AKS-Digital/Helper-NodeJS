@@ -217,6 +217,17 @@ authRoutes.post("/refresh-token", async (req, res, next) => {
 });
 ```
 
+## fichier .env
+
+Ajouter les clés suivantes dans le fichier .env
+
+````
+ACCESS_TOKEN_SECRET=<YOUR_ACCESS_TOKEN_SECRET_KEY>
+REFRESH_TOKEN_SECRET=<YOUR_REFRESH_TOKEN_SECRET_KEY>
+ACCESS_TOKEN_EXPIRES_IN = 1d
+REFRESH_TOKEN_EXPIRES_IN = 7d
+```
+
 ## Création des tests
 
 TO DO
