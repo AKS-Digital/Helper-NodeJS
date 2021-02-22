@@ -35,6 +35,14 @@ Installer les dépendances pour le projet
 npm install typescript ts-node nodemon concurrently wait-on
 ```
 
+| Package       | Version   | Description        |
+| :---          |    :---: |          :---      |
+| typescript    | 4.1.3     | TypeScript étend JavaScript en ajoutant des types   |
+| ts-node       | 9.1.1     | Exécution TypeScript et REPL pour node.js. Fonctionne avec Typescript @> = 2.7           |
+| nodemon       | 2.0.7     | nodemon est un outil qui permet de développer des applications basées sur node.js en redémarrant automatiquement l'application de nœud lorsque des modifications de fichier dans le répertoire sont détectées.          |
+| concurrently  | 5.3.0     | Exécute plusieurs commandes simultanément.          |
+| wait-on       | 5.2.1     | wait-on est un utilitaire de ligne de commande multiplateforme qui attendra que les fichiers, ports, sockets et ressources http (s) soient disponibles          |
+
 ## Package.json
 
 Modifier le fichier **package.json** en insérant les lignes suivantes:
