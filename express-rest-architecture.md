@@ -5,8 +5,20 @@ Express est un cadre d'application Web Node.js minimal et flexible qui fournit u
 ## Installation des dépendances
 
 ```
-npm install dotenv express @types/express cors http-errors @types/http-errors
+npm install dotenv express @types/express cors @types/cors http-errors @types/http-errors
 ```
+
+| Package             | Version   | Description |
+| :---                |    :---:  | :---        |
+| dotenv              | 8.2.0     | Dotenv est un module sans dépendance qui charge les variables d'environnement d'un fichier .env dans process.env.|
+| express             | 4.17.1    | The Express philosophy is to provide small, robust tooling for HTTP servers, making it a great solution for single page applications, websites, hybrids, or public HTTP APIs. |
+| @types/express      | 4.17.11    | Package de définition des types pour express |
+| cors                | 2.8.5     |CORS est un package node.js pour fournir un middleware Connect / Express qui peut être utilisé pour activer CORS avec diverses options.|
+| @types/cors         | 2.8.9    |Package de définition des types pour cors|
+| http-errors         | 1.8.0    |Créer des erreurs HTTP pour Express|
+| @types/http-errors  | 1.8.0    |Package de définition des types pour http-errors|
+
+
 
 ## dotenv
 
