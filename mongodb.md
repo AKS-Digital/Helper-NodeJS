@@ -1,4 +1,4 @@
-# Base de données (MongoDB) - ***Update : 5 Février 2021***
+# Base de données (MongoDB) - ***Update : 2 Mars 2021***
 
 **MongoDB** est une base de données **noSQL**.
 
@@ -22,6 +22,19 @@ MongoDB Compass est une interface graphique permettant de manipuler des bases de
 ### Vérification
 
 > Pour vérifier votre installation de MongoDB, lancez MongoDB Compass et cliquez sur “Connect”. Si jamais il y a une erreur, essayez la commande **brew services restart mongodb-community** dans le terminal pour redémarrer MongoDB.
+> 
+
+## Créer une instance de base de données
+
+Se rendre sur le site de [https://cloud.mongodb.com/](https://cloud.mongodb.com/).
+
+- Dans l'onglet ***Atlas***, appuyer sur le bouton ***Build a cluster***
+- Choisir la zone géographique pour le plan gratuit (frankfurt pour AWS)
+- Saisir un nom au cluster
+- Une fois le cluster créé, appuyer sur ***connect***
+- Dans la méthode de connexion, choisir ***connect your application***, ***Node.js***
+- Copier le lien est le placer dans le fichier .env
+
 
 ## Installation des packages
 
