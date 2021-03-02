@@ -42,48 +42,62 @@ Créer le fichier **src/db/mongodb.ts** et copier :
 ```ts
 import mongoose from "mongoose";
 
-const mode = process.env.NODE_ENV;
-const url =
-  mode === "prod" ? process.env.MONGODB_URI : process.env.MONGODB_URI_DEV;
-const dbName =
-  mode === "prod" ? process.env.APP_NAME : process.env.APP_NAME + "-dev";
+const config = {
+  prod: {
+    url: process.env.MONGODB_URI,
+    dbName: process.env.APP_NAME,
+  },
+  dev: {
+    url: process.env.MONGODB_URI_DEV,
+    dbName: process.env.APP_NAME + "-dev",
+  },
+  test: {
+    url: process.env.MONGODB_URI_DEV,
+    dbName: process.env.APP_NAME + "-test",
+  },
+};
 
-const connect = () => {
-  mongoose
-    .connect(url.toString(), {
-      dbName,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-      useCreateIndex: true,
-    })
-    .then(() => console.log(`Database connected at ${url}`))
-    .catch((err) => console.log(err.message));
+// @ts-ignore
+const { url, dbName } = config[process.env.NODE_ENV ?? "dev"];
+
+const connect = async () => {
+  await mongoose.connect(url.toString(), {
+    dbName,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  });
 };
 
 const close = async () => {
   await mongoose.connection.close();
 };
 
+const dropDatabase = async () => {
+  const status = await mongoose.connection.db.dropDatabase();
+  console.log("Database droped :", status);
+};
+
 mongoose.connection.on("connected", () =>
-  console.log("Mongoose connection is opened")
+  console.log(`${dbName} mongoose connection is opened at ${url}`)
 );
 
-mongoose.connection.on("error", (err) => console.log(err.message));
+mongoose.connection.on("error", (err) =>
+  console.log("Mongoose connection ERROR : ", err.message)
+);
 
 mongoose.connection.on("disconnected", () =>
   console.log("Mongoose connection is closed")
 );
 
-export default { connect, close };
+export default { connect, close, dropDatabase };
 ```
 
 Créer un fichier **src/db/index.ts** et copier :
 
 ```ts
-import mongodb from "./mongodb";
-
-export default mongodb;
+export { default } from "./mongodb";
 ```
 
 Insérer dans le fichier **src/index.ts** le code :
@@ -93,7 +107,7 @@ Insérer dans le fichier **src/index.ts** le code :
 import mongoDB from "./db";
 
 //... code
-mongoDB.connect();
+await mongoDB.connect();
 //... code serveur
 
 process.on("SIGINT", async () => {
