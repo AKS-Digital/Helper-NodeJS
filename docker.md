@@ -19,9 +19,9 @@ Dockerfile
 Créer un fichier sans extension ***Dockerfile*** et copier:
 
 ```
-FROM node:lastest
+FROM node:14
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 
@@ -29,13 +29,35 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 10000
 
-CMD ["npm run dev"]
+ENTRYPOINT npm start
+```
+
+Créer un fichier sans extension ***docker-compose.yml*** et copier:
+
+```
+version: "3"
+services:
+  app:
+    container_name: airpol
+    restart: always
+    build: .
+    ports:
+      - "10000:10000"
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
 ```
 
 Lancer le conteneur docker avec la commande :
 
+La clé ***-d*** est utile pour détaché l'instance docker et avoir le terminal libre
+
 ```zsh
-docker build -t airpol
+docker-compose up -d
 ```
