@@ -6,7 +6,7 @@ Ce fichier regroupe tous les éléments afin de mettre en place un serveur **Nod
 - [Mise en place d'un serveur en architecture REST](express-rest-architecture.md)
 - [Connexion avec une base de données MongoDB](mongodb.md)
 - [Intégration de test unitaire](jest-installation.md)
-- Intégration de Docker
+- [Intégration de Docker](docker.md)
 - Publication de l'application sur serveur Heroku
 - Serveur avancé
   - [Authentification (JWT)](auth.md)
