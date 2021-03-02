@@ -61,3 +61,8 @@ La clé ***-d*** est utile pour détaché l'instance docker et avoir le terminal
 ```zsh
 docker-compose up -d
 ```
+
+Arrêter l'instance docker avec la commande :
+
+```zsh
+docker-compose down
