@@ -164,10 +164,15 @@ import {
   verifyRefreshToken,
   Redis,
 } from "../helpers";
+import {
+  registerLimiter,
+  loginLimiter,
+  refreshTokenLimiter,
+} from "../limiters";
 
 export const authRoutes = Router();
 
-authRoutes.post("/register", async (req, res, next) => {
+authRoutes.post("/register", registerLimiter, async (req, res, next) => {
   try {
     const { email, password } = await authSchema.validateAsync(req.body);
     const user = await User.findOne({ email });
@@ -184,7 +189,7 @@ authRoutes.post("/register", async (req, res, next) => {
   }
 });
 
-authRoutes.post("/login", async (req, res, next) => {
+authRoutes.post("/login", loginLimiter, async (req, res, next) => {
   try {
     const { email, password } = await authSchema.validateAsync(req.body);
     const user = await User.findOne({ email });
@@ -202,7 +207,7 @@ authRoutes.post("/login", async (req, res, next) => {
   }
 });
 
-authRoutes.post("/refresh-token", async (req, res, next) => {
+authRoutes.post("/refresh-token", refreshTokenLimiter, async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
     if (!refreshToken || typeof refreshToken !== "string")
@@ -235,6 +240,33 @@ authRoutes.delete("/logout", async (req, res, next) => {
   }
 });
 ```
+
+## Création des limiters
+
+Créer un fichier **src/limiters/auth.limiter.ts** et copier :
+
+```ts
+import limiter from "express-rate-limit";
+import createError from "http-errors";
+
+export const registerLimiter = limiter({
+  windowMs: 1000 * 60 * 5, // 5 minutes
+  max: 2,
+  message: new createError.TooManyRequests(),
+});
+
+export const loginLimiter = limiter({
+  windowMs: 1000 * 60 * 1, // 1 minute
+  max: 5,
+  message: new createError.TooManyRequests(),
+});
+
+export const refreshTokenLimiter = limiter({
+  windowMs: 1000 * 60 * 5, // 5 minutes
+  max: 3,
+  message: new createError.TooManyRequests(),
+});
+
 
 ## fichier .env
 
