@@ -70,7 +70,7 @@ const close = () => {
   client.quit();
 };
 
-export default { open, close };
+export const Redis = { open, close };
 ```
 
 Ajouter dans ***src/index.ts***
