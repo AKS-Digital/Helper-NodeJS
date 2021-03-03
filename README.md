@@ -17,3 +17,4 @@ Ce fichier regroupe tous les éléments afin de mettre en place un serveur **Nod
   - Envoi d'email
   - Notifications (socket.io)
 - Planificateur de tâches
+- Upload de fichiers
