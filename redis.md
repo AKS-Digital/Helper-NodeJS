@@ -42,7 +42,7 @@ npm install redis @types/redis
 Ajouter dans le fichier .env 
 
 ```
-REDIS_URL=http://127.0.0.1
+REDIS_URL=redis://127.0.0.1
 ```
 
 Créer un fichiers ***src/helpers/redis.ts*** et copier
