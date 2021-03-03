@@ -266,7 +266,7 @@ export const refreshTokenLimiter = limiter({
   max: 3,
   message: new createError.TooManyRequests(),
 });
-
+```
 
 ## fichier .env
 
