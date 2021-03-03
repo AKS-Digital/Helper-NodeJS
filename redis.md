@@ -2,6 +2,8 @@
 
 Redis garde en mémoire une structures de données et est open source (sous licence BSD), utilisé comme base de données, cache et message broker.
 
+:fire: Attention : Redis redémarre toutes les 5 minutes à cause du [timeout](https://devcenter.heroku.com/articles/heroku-redis#timeout). à vérifier si cela ne provient pas du free-plan.
+
 ## Installation
 
 ```zsh
