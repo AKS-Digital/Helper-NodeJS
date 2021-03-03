@@ -228,6 +228,8 @@ ACCESS_TOKEN_EXPIRES_IN = 1d
 REFRESH_TOKEN_EXPIRES_IN = 7d
 ```
 
+Pour générer des clés, utiliser ce site [https://keygen.io/](https://keygen.io/) dans la rubrique SHA-256 key
+
 ## Création des tests
 
 TO DO
