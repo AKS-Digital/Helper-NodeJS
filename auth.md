@@ -168,7 +168,7 @@ export const authRoutes = Router();
 
 authRoutes.post("/register", async (req, res, next) => {
   try {
-    const { email, password } = await authSchema.validateAsync(req.fields);
+    const { email, password } = await authSchema.validateAsync(req.body);
     const user = await User.findOne({ email });
     if (user)
       throw new createError.Conflict(`${email} is already been registered`);
@@ -185,7 +185,7 @@ authRoutes.post("/register", async (req, res, next) => {
 
 authRoutes.post("/login", async (req, res, next) => {
   try {
-    const { email, password } = await authSchema.validateAsync(req.fields);
+    const { email, password } = await authSchema.validateAsync(req.body);
     const user = await User.findOne({ email });
     if (!user) throw new createError.NotFound("User not registered");
     const isValidPassword = await decodePassword(password, user.password);
@@ -203,7 +203,7 @@ authRoutes.post("/login", async (req, res, next) => {
 
 authRoutes.post("/refresh-token", async (req, res, next) => {
   try {
-    const { refreshToken } = req.fields;
+    const { refreshToken } = req.body;
     if (!refreshToken || typeof refreshToken !== "string")
       throw new createError.BadRequest();
     const userId = await verifyRefreshToken(refreshToken);
