@@ -7,6 +7,7 @@ Ce fichier regroupe tous les éléments afin de mettre en place un serveur **Nod
 - [Connexion avec une base de données MongoDB](mongodb.md)
 - [Intégration de test unitaire](jest-installation.md)
 - [Intégration de Docker](docker.md)
+- [Redis](redis.md)
 - Publication de l'application sur serveur Heroku
 - Serveur avancé
   - [Authentification (JWT)](auth.md)
