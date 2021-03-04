@@ -12,7 +12,7 @@ Ce fichier regroupe tous les éléments afin de mettre en place un serveur **Nod
 - [Publication de l'application sur serveur Heroku](heroku.md)
 - Serveur avancé
   - [Authentification (JWT)](auth.md)
-  - Collection (Utilisateurs)
+  - [Collection (Utilisateurs)](user-route.md)
   - Collection (Carte de crédit)
   - Envoi d'email
   - Notifications (socket.io)
