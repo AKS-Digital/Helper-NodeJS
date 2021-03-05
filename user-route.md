@@ -95,4 +95,3 @@ userRoutes.delete("/delete", verifyAccessToken, async (req, res, next) => {
   }
 });
 ```
-  birthdate: Joi.date().timestamp().iso(),
