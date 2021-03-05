@@ -48,9 +48,9 @@ Intégration des routes utilisateur à express
 ```ts
 import { Router } from "express";
 import createError from "http-errors";
-import { IUser, User } from "../db";
+import { User } from "../db";
 import { userSchema } from "../validator";
-import { verifyAccessToken } from "../helpers";
+import { verifyAccessToken, Redis } from "../helpers";
 
 export const userRoutes = Router();
 
@@ -89,6 +89,12 @@ userRoutes.delete("/delete", verifyAccessToken, async (req, res, next) => {
     const user = await User.findById(userId);
     if (!user) throw new createError.NotFound();
     await user.remove();
+    Redis.client.DEL(userId, (err) => {
+      if (err) {
+        console.log(err.message);
+        throw new createError.InternalServerError();
+      }
+    });
     return res.send({ message: "user removed" });
   } catch (err) {
     next(err);
